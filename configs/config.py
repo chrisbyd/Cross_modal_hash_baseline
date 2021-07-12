@@ -21,7 +21,7 @@ def config():
     text_lr = 1e-5
     momentum = 0.9
     weight_decay = 0.0005
-    margin = 3
+    margin = 15
 
 
     #text config
