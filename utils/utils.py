@@ -81,7 +81,6 @@ def CrossModel_triplet_loss(imgae_Ihash, text_Ihash, labels, margin):
     if triplets:
         triplets = np.array(triplets)
         # print('triplet', triplets.shape)
-
         # intra triplet loss
         # image
         imgae_I_ap = (imgae_Ihash[triplets[:, 0]] - imgae_Ihash[triplets[:, 1]]).pow(2).sum(1)

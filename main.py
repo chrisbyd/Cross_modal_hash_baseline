@@ -6,6 +6,10 @@ from configs.config import ex
 from  model import CrossRetrievalModel
 from datasets.datamodule import HashDataModule
 
+
+
+
+
 @ex.automain
 def main(_config):
     config = copy.deepcopy(_config)
