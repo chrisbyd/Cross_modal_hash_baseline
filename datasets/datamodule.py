@@ -4,7 +4,6 @@ from PIL import Image
 import torchvision.transforms as transforms
 import torch.utils.data as torchdata
 import os
-from .HashDataset import HashDataset
 from  datasets import load_data
 
 mean = (0.4914, 0.4822, 0.4465)
@@ -38,11 +37,11 @@ class HashDataModule(LightningDataModule):
         return train_loader 
 
     def query_loader(self):
-        query_loader = DataLoader(self.q_data_set, batch_size=self.config['batch_size'], shuffle=False, num_workers=4)
+        query_loader = DataLoader(self.q_data_set, batch_size=self.config['test_batch_size'], shuffle=False, num_workers=4)
         return query_loader
 
     def gallery_loader(self):
-        gallery_loader = DataLoader(self.g_data_set, batch_size=self.config['batch_size'], shuffle=False, num_workers=4)
+        gallery_loader = DataLoader(self.g_data_set, batch_size=self.config['test_batch_size'], shuffle=False, num_workers=4)
         return gallery_loader
 
     def test_dataloader(self):

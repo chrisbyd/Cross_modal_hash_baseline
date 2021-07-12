@@ -6,7 +6,7 @@ from scipy import io as sio
 import numpy as np
 import os
 from .loader import HashDataset
-from . import transform_train, transform_test
+from .loader import transform_train, transform_test
 default_img_mat_url = os.path.join( "./data", "coco2014", "imgList.mat")
 default_tag_mat_url = os.path.join( "./data", "coco2014", "tagList.mat")
 default_label_mat_url = os.path.join( "./data", "coco2014", "labelList.mat")

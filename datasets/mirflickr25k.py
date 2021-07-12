@@ -7,12 +7,12 @@ import numpy as np
 import os
 from datasets.loader import HashDataset
 import torchvision.transforms as transforms
-from . import transform_train, transform_test
+from .loader import transform_train, transform_test
 
-default_img_mat_url = os.path.join("./data", "mirflckr25k", "imgList.mat")
-default_tag_mat_url = os.path.join("./data", "mirflckr25k", "tagList.mat")
-default_label_mat_url = os.path.join("./data", "mirflckr25k", "labelList.mat")
-default_image_dir = os.path.join("./data", 'coco2014')
+default_img_mat_url = os.path.join("./data", "mirflicker25",'mat', "imgList.mat")
+default_tag_mat_url = os.path.join("./data", "mirflicker25", 'mat',"tagList.mat")
+default_label_mat_url = os.path.join("./data", "mirflicker25", 'mat',"labelList.mat")
+default_image_dir = os.path.join("./data", 'mirflicker25','images')
 
 default_seed = 6
 

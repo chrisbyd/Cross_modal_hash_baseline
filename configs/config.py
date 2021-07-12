@@ -8,7 +8,8 @@ def config():
     exp_name = 'CrossBaseline'
     seed = 0
     dataset_name = 'flickr25'  # flickr coco nuswide and iaprtc
-    batch_size = 64
+    batch_size = 32
+    test_batch_size = 64
 
     crop_size = 224
     max_epochs = 300
@@ -22,6 +23,13 @@ def config():
     weight_decay = 0.0005
     margin = 12
 
+
+    #text config
+    text_dim = 1386
+    hidden_dim = 8192
+
+    #image_Config
+    pretrained_dir = './pretrained_dir/imagenet-vgg-f.mat'
 
 
     #evaluate interval

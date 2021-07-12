@@ -26,11 +26,13 @@ class TextMLP(nn.Module):
                 nn.BatchNorm1d(config['hidden_dim'] // 4),
                 nn.ReLU(True),
                 nn.Dropout(0.5))
-        self.hash_layer = nn.Linear()
+        self.hash_layer = nn.Linear(config['hidden_dim'] // 4, config['hash_length'])
+        self.tanh = nn.Tanh()
         self.apply(weights_init)
 
 
     def forward(self, input):
+        input = input.float()
         feature = self.text_module(input)
-        hash_feature = self.hash_layer(feature)
+        hash_feature = self.tanh(self.hash_layer(feature))
         return hash_feature

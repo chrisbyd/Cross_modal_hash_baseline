@@ -7,7 +7,7 @@ import torchvision
 import torch.nn.functional as function
 
 class Image_net(nn.Module):
-    def __init__(self, pretrain_model):
+    def __init__(self, pretrain_model, config):
         super(Image_net, self).__init__()
         self.img_module = nn.Sequential(
             # 0 conv1
@@ -55,6 +55,9 @@ class Image_net(nn.Module):
             # 19 full_conv8
         )
         self.mean = torch.zeros(3, 224, 224)
+        self.config = config
+        self.hash_feature = nn.Linear(4096, self.config['hash_length'], bias= True)
+        self.tanh = nn.Tanh()
         self._init(pretrain_model)
 
     def _init(self, data):
@@ -72,6 +75,8 @@ class Image_net(nn.Module):
         print('sucusses init!')
 
     def forward(self, x):
-        x = x - self.mean.to(opt.device)
+        x = x - self.mean.cuda()
         f_x = self.img_module(x)
-        return f_x
+        f_x = f_x.squeeze()
+        hash_feature = self.tanh(self.hash_feature(f_x))
+        return hash_feature

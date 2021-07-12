@@ -5,17 +5,18 @@ from pytorch_transformers import BertTokenizer, BertModel, BertForMaskedLM, Bert
 from  utils.utils import CrossModel_triplet_loss, Variable, compute_result_CrossModel, compute_mAP_MultiLabels
 from networks import TextMLP,Image_net
 import torch
+import scipy.io as scio
 class CrossRetrievalModel(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.config = config
         self.text_net = TextMLP(config= self.config)
-        self.image_net = Image_net(pretrain_model = config['pretrained_dir'])
+        self.image_net = Image_net(pretrain_model = scio.loadmat(config['pretrained_dir']), config= config)
         self.previous_epoch = -1
 
 
     def configure_optimizers(self):
-        optimier = optim.Adam(list(self.uniformer.parameters()),
+        optimier = optim.Adam(list(self.text_net.parameters()) + list(self.image_net.parameters()),
                               lr = self.config['lr'], weight_decay=self.config['weight_decay'])
         return optimier
 
@@ -36,7 +37,9 @@ class CrossRetrievalModel(pl.LightningModule):
 
     def training_step(self, batch, batch_index):
         images, texts, labels = batch
+
         image_hash_feature, text_hash_feature = self.forward_all(images, texts)
+
         image_triplet_loss, text_triplet_loss, \
         image_text_triplet_loss, text_image_triplet_loss, \
         len_triplets = CrossModel_triplet_loss(image_hash_feature, text_hash_feature, labels, self.config['margin'])
@@ -53,10 +56,10 @@ class CrossRetrievalModel(pl.LightningModule):
         query_loader = self.trainer.datamodule.query_loader()
         gallery_loader = self.trainer.datamodule.gallery_loader()
         print("Start computing the hash codes for images and texts")
-        tst_image_binary, tst_text_binary, tst_label, tst_time = compute_result_CrossModel(query_loader, self.uniformer,
-                                                                                            self.tokenizer)
-        db_image_binary, db_text_binary, db_label, db_time = compute_result_CrossModel(gallery_loader, self.uniformer,
-                                                                                       self.tokenizer)
+        tst_image_binary, tst_text_binary, tst_label, tst_time = compute_result_CrossModel(query_loader, self.text_net, self.image_net
+                                                                                            )
+        db_image_binary, db_text_binary, db_label, db_time = compute_result_CrossModel(gallery_loader, self.text_net, self.image_net
+                                                                                       )
         # print('test_codes_time = %.6f, db_codes_time = %.6f'%(tst_time ,db_time))
         print("Start computing mAP")
         it_mAP = compute_mAP_MultiLabels(db_text_binary, tst_image_binary, db_label, tst_label)

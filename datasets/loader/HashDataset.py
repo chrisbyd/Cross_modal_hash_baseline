@@ -33,4 +33,4 @@ class HashDataset(torchdata.Dataset):
         return img, text, label
 
     def __len__(self):
-        return len(self.data)
+        return len(self.images)

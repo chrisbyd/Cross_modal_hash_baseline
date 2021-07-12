@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 from pytorch_lightning import trainer
 from configs.config import ex
 from  model import CrossRetrievalModel
-from datasets.loader import HashDataModule
+from datasets.datamodule import HashDataModule
 
 @ex.automain
 def main(_config):
@@ -22,10 +22,7 @@ def main(_config):
     )
     dm = HashDataModule(config= config)
     model = CrossRetrievalModel(config= config)
-    pretrained_file = {}
-    pretrained_file['vision'] = './pretrained_dir/ViT-B_32.npz'
-    pretrained_file['text'] = './pretrained_dir/bert_pretrain/bert_model.ckpt'
-    model.load_model(None,pretrained_file)
+
 
     if not config["test_only"]:
         trainer.fit(model, datamodule= dm)
