@@ -1,0 +1,5 @@
+pretrained_dir/
+data/
+*.pyc
+.idea/
+results/
